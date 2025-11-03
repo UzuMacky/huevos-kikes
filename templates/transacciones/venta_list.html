@@ -37,7 +37,7 @@
                             <a href="{% url 'transacciones:venta_detail' venta.pk %}" class="btn btn-sm btn-info">
                                 <i class="bi bi-eye"></i>
                             </a>
-                            <a href="{% url 'transacciones:generar_factura_pdf' venta.pk %}" class="btn btn-sm btn-danger" target="_blank">
+                            <a href="{% url 'transacciones:venta_pdf' venta.pk %}" class="btn btn-sm btn-danger" target="_blank">
                                 <i class="bi bi-file-pdf"></i> PDF
                             </a>
                         </td>
