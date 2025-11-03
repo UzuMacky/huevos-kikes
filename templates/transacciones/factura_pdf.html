@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Factura de Venta #{{ venta.id }}</title>
+    <style>
+        @page {
+            size: letter;
+            margin: 2cm;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            color: #333;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            color: #FFA500;
+            font-size: 28px;
+        }
+        
+        .header p {
+            margin: 5px 0;
+        }
+        
+        .factura-info {
+            margin-bottom: 20px;
+        }
+        
+        .factura-info table {
+            width: 100%;
+        }
+        
+        .factura-info td {
+            padding: 5px;
+        }
+        
+        .info-box {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        .info-box h3 {
+            margin-top: 0;
+            color: #FFA500;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        
+        .detalles-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .detalles-table th {
+            background-color: #FFA500;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .detalles-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        
+        .detalles-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .text-right {
+            text-align: right;
+        }
+        
+        .total-box {
+            float: right;
+            width: 300px;
+            margin-top: 20px;
+        }
+        
+        .total-box table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .total-box td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+        
+        .total-box .total-final {
+            background-color: #FFA500;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 10px;
+            color: #666;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+        
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <!-- Encabezado -->
+    <div class="header">
+        <h1>🥚 HUEVOS KIKES</h1>
+        <p><strong>NIT:</strong> 900.123.456-7</p>
+        <p><strong>Dirección:</strong> Calle 123 #45-67, Bogotá, Colombia</p>
+        <p><strong>Teléfono:</strong> (601) 234-5678 | <strong>Email:</strong> ventas@huevoskikes.com</p>
+    </div>
+    
+    <!-- Información de la Factura -->
+    <div class="factura-info">
+        <table>
+            <tr>
+                <td style="width: 50%;">
+                    <div class="info-box">
+                        <h3>Cliente</h3>
+                        <p><strong>Nombre:</strong> {{ venta.cliente.nombre }}</p>
+                        <p><strong>Cédula/NIT:</strong> {{ venta.cliente.cedula_nit }}</p>
+                        <p><strong>Dirección:</strong> {{ venta.cliente.direccion }}</p>
+                        <p><strong>Teléfono:</strong> {{ venta.cliente.telefono }}</p>
+                        <p><strong>Email:</strong> {{ venta.cliente.email }}</p>
+                    </div>
+                </td>
+                <td style="width: 50%; vertical-align: top;">
+                    <div class="info-box">
+                        <h3>Factura de Venta</h3>
+                        <p><strong>Número:</strong> #{{ venta.id|stringformat:"05d" }}</p>
+                        <p><strong>Fecha:</strong> {{ venta.fecha_hora|date:"d/m/Y H:i" }}</p>
+                        <p><strong>Vendedor:</strong> {{ venta.usuario_vendedor.get_full_name|default:venta.usuario_vendedor.username }}</p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <!-- Detalles de la Venta -->
+    <h3 style="color: #FFA500;">Detalles de la Venta</h3>
+    <table class="detalles-table">
+        <thead>
+            <tr>
+                <th style="width: 10%;">#</th>
+                <th style="width: 40%;">Tipo de Huevo</th>
+                <th style="width: 15%;" class="text-right">Cantidad</th>
+                <th style="width: 17.5%;" class="text-right">Precio Unit.</th>
+                <th style="width: 17.5%;" class="text-right">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for detalle in detalles %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>Huevo Tipo {{ detalle.tipo_huevo.tipo }}</td>
+                <td class="text-right">{{ detalle.cantidad_cubetas }} cubeta{{ detalle.cantidad_cubetas|pluralize:"s" }}</td>
+                <td class="text-right">${{ detalle.precio_unitario_cubeta|floatformat:2 }}</td>
+                <td class="text-right">${{ detalle.subtotal|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <!-- Total -->
+    <div class="clearfix">
+        <div class="total-box">
+            <table>
+                <tr class="total-final">
+                    <td><strong>TOTAL</strong></td>
+                    <td class="text-right"><strong>${{ venta.total|floatformat:2 }}</strong></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Pie de página -->
+    <div class="footer">
+        <p><strong>¡Gracias por su compra!</strong></p>
+        <p>Esta es una factura generada electrónicamente por el Sistema SCM de Huevos Kikes.</p>
+        <p>Documento generado el {{ "now"|date:"d/m/Y H:i" }}</p>
+    </div>
+</body>
+</html>

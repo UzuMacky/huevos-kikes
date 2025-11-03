@@ -1,0 +1,224 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if object %}Editar{% else %}Crear{% endif %} Cliente - Huevos Kikes</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .map-instructions {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-left: 4px solid #0d6efd;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>{% if object %}Editar{% else %}Crear{% endif %} Cliente</h2>
+                <hr>
+                
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <!-- Información básica -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.nombre.id_for_label }}" class="form-label">Nombre *</label>
+                                {{ form.nombre }}
+                                {% if form.nombre.errors %}
+                                    <div class="text-danger">{{ form.nombre.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.cedula_nit.id_for_label }}" class="form-label">Cédula/NIT *</label>
+                                {{ form.cedula_nit }}
+                                {% if form.cedula_nit.errors %}
+                                    <div class="text-danger">{{ form.cedula_nit.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label for="{{ form.direccion.id_for_label }}" class="form-label">Dirección *</label>
+                                {{ form.direccion }}
+                                {% if form.direccion.errors %}
+                                    <div class="text-danger">{{ form.direccion.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.telefono.id_for_label }}" class="form-label">Teléfono *</label>
+                                {{ form.telefono }}
+                                {% if form.telefono.errors %}
+                                    <div class="text-danger">{{ form.telefono.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">Email *</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger">{{ form.email.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Geolocalización -->
+                    <h4 class="mt-4">Ubicación del Cliente</h4>
+                    <div class="map-instructions">
+                        <strong>📍 Instrucciones:</strong> Haz clic en el mapa para marcar la ubicación del cliente. 
+                        Las coordenadas se capturarán automáticamente.
+                    </div>
+                    
+                    <!-- Mapa de Google -->
+                    <div id="map"></div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.latitud.id_for_label }}" class="form-label">Latitud</label>
+                                {{ form.latitud }}
+                                {% if form.latitud.errors %}
+                                    <div class="text-danger">{{ form.latitud.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.longitud.id_for_label }}" class="form-label">Longitud</label>
+                                {{ form.longitud }}
+                                {% if form.longitud.errors %}
+                                    <div class="text-danger">{{ form.longitud.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        {{ form.activo }}
+                        <label class="form-check-label" for="{{ form.activo.id_for_label }}">
+                            Cliente Activo
+                        </label>
+                    </div>
+                    
+                    <!-- Botones -->
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Guardar
+                        </button>
+                        <a href="{% url 'clientes:list' %}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Google Maps API -->
+    <!-- IMPORTANTE: Reemplaza TU_API_KEY con tu API Key de Google Maps -->
+    <script>
+        let map;
+        let marker;
+        
+        function initMap() {
+            // Ubicación por defecto (Bogotá, Colombia)
+            let defaultLat = 4.60971;
+            let defaultLng = -74.08175;
+            
+            // Si ya hay coordenadas, usarlas
+            const latInput = document.getElementById('id_latitud');
+            const lngInput = document.getElementById('id_longitud');
+            
+            if (latInput.value && lngInput.value) {
+                defaultLat = parseFloat(latInput.value);
+                defaultLng = parseFloat(lngInput.value);
+            }
+            
+            // Crear el mapa
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: defaultLat, lng: defaultLng },
+                zoom: 13
+            });
+            
+            // Crear marcador inicial si hay coordenadas
+            if (latInput.value && lngInput.value) {
+                marker = new google.maps.Marker({
+                    position: { lat: defaultLat, lng: defaultLng },
+                    map: map,
+                    draggable: true
+                });
+                
+                // Evento cuando se arrastra el marcador
+                google.maps.event.addListener(marker, 'dragend', function(event) {
+                    updateCoordinates(event.latLng.lat(), event.latLng.lng());
+                });
+            }
+            
+            // Evento click en el mapa
+            google.maps.event.addListener(map, 'click', function(event) {
+                placeMarker(event.latLng);
+                updateCoordinates(event.latLng.lat(), event.latLng.lng());
+            });
+        }
+        
+        function placeMarker(location) {
+            // Si ya existe un marcador, moverlo
+            if (marker) {
+                marker.setPosition(location);
+            } else {
+                // Crear nuevo marcador
+                marker = new google.maps.Marker({
+                    position: location,
+                    map: map,
+                    draggable: true
+                });
+                
+                // Evento cuando se arrastra el marcador
+                google.maps.event.addListener(marker, 'dragend', function(event) {
+                    updateCoordinates(event.latLng.lat(), event.latLng.lng());
+                });
+            }
+        }
+        
+        function updateCoordinates(lat, lng) {
+            document.getElementById('id_latitud').value = lat.toFixed(8);
+            document.getElementById('id_longitud').value = lng.toFixed(8);
+        }
+    </script>
+    
+    <!-- Cargar Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&callback=initMap" async defer></script>
+</body>
+</html>

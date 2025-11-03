@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Proveedor - Huevos Kikes{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-danger">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-exclamation-triangle"></i> Confirmar Eliminación
+                </h4>
+            </div>
+            <div class="card-body">
+                <p class="lead">¿Está seguro que desea eliminar el siguiente proveedor?</p>
+                
+                <div class="alert alert-info">
+                    <strong>Nombre:</strong> {{ proveedor.nombre }}<br>
+                    <strong>NIT:</strong> {{ proveedor.nit }}<br>
+                    <strong>Teléfono:</strong> {{ proveedor.telefono }}
+                </div>
+                
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <strong>Advertencia:</strong> Esta acción no se puede deshacer.
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Sí, Eliminar
+                    </button>
+                    <a href="{% url 'proveedores:list' %}" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i> Cancelar
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

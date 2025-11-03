@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ proveedor.nombre }} - Huevos Kikes{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                    <i class="bi bi-truck"></i> Detalle del Proveedor
+                </h4>
+                <div>
+                    <a href="{% url 'proveedores:update' proveedor.pk %}" class="btn btn-warning">
+                        <i class="bi bi-pencil"></i> Editar
+                    </a>
+                    <a href="{% url 'proveedores:list' %}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Volver
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Información General</h5>
+                        <table class="table">
+                            <tr>
+                                <th width="40%">Nombre:</th>
+                                <td>{{ proveedor.nombre }}</td>
+                            </tr>
+                            <tr>
+                                <th>NIT:</th>
+                                <td>{{ proveedor.nit }}</td>
+                            </tr>
+                            <tr>
+                                <th>Dirección:</th>
+                                <td>{{ proveedor.direccion }}</td>
+                            </tr>
+                            <tr>
+                                <th>Teléfono:</th>
+                                <td>{{ proveedor.telefono }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email:</th>
+                                <td>{{ proveedor.email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Estado:</th>
+                                <td>
+                                    {% if proveedor.activo %}
+                                        <span class="badge bg-success">Activo</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Inactivo</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Fecha de Registro:</th>
+                                <td>{{ proveedor.fecha_registro|date:"d/m/Y H:i" }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h5>Documentos</h5>
+                        <div class="mb-3">
+                            <strong>RUT:</strong><br>
+                            <a href="{{ proveedor.rut.url }}" target="_blank" class="btn btn-sm btn-primary mt-2">
+                                <i class="bi bi-file-earmark-pdf"></i> Ver RUT
+                            </a>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Cámara de Comercio:</strong><br>
+                            <a href="{{ proveedor.camara_comercio.url }}" target="_blank" class="btn btn-sm btn-primary mt-2">
+                                <i class="bi bi-file-earmark-pdf"></i> Ver Cámara de Comercio
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

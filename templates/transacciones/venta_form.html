@@ -1,0 +1,253 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ view.kwargs.pk|yesno:"Editar,Nueva" }} Venta - Huevos Kikes{% endblock %}
+
+{% block extra_css %}
+<style>
+    .formset-row {
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 15px;
+        background-color: #f8f9fa;
+    }
+    .formset-row:hover {
+        background-color: #e9ecef;
+    }
+    .delete-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+    #total-venta {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #198754;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-cart-plus"></i> {{ view.kwargs.pk|yesno:"Editar,Nueva" }} Venta
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="post" id="venta-form">
+                    {% csrf_token %}
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="{{ form.cliente.id_for_label }}" class="form-label">
+                                Cliente <span class="text-danger">*</span>
+                            </label>
+                            {{ form.cliente }}
+                            {% if form.cliente.errors %}
+                                <div class="text-danger">{{ form.cliente.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <h5 class="mb-3">Detalles de la Venta</h5>
+                    
+                    {{ formset.management_form }}
+                    
+                    <div id="formset-container">
+                        {% for form in formset %}
+                        <div class="formset-row">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="{{ form.tipo_huevo.id_for_label }}" class="form-label">
+                                        Tipo de Huevo
+                                    </label>
+                                    {{ form.tipo_huevo }}
+                                    {% if form.tipo_huevo.errors %}
+                                        <div class="text-danger">{{ form.tipo_huevo.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="{{ form.cantidad_cubetas.id_for_label }}" class="form-label">
+                                        Cantidad (Cubetas)
+                                    </label>
+                                    {{ form.cantidad_cubetas }}
+                                    {% if form.cantidad_cubetas.errors %}
+                                        <div class="text-danger">{{ form.cantidad_cubetas.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="{{ form.precio_unitario_cubeta.id_for_label }}" class="form-label">
+                                        Precio Unitario
+                                    </label>
+                                    {{ form.precio_unitario_cubeta }}
+                                    {% if form.precio_unitario_cubeta.errors %}
+                                        <div class="text-danger">{{ form.precio_unitario_cubeta.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-2 delete-row">
+                                    {% if form.instance.pk %}
+                                        {{ form.DELETE }}
+                                        <label for="{{ form.DELETE.id_for_label }}">
+                                            <i class="bi bi-trash text-danger"></i> Eliminar
+                                        </label>
+                                    {% else %}
+                                        <button type="button" class="btn btn-sm btn-danger remove-form">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    {% endif %}
+                                    {{ form.id }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-primary" id="add-form">
+                                <i class="bi bi-plus-circle"></i> Agregar Producto
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-md-12 text-end">
+                            <h4>Total: <span id="total-venta">$0</span></h4>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+                    
+                    {% if formset.non_form_errors %}
+                        <div class="alert alert-danger">
+                            {{ formset.non_form_errors }}
+                        </div>
+                    {% endif %}
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'transacciones:ventas_list' %}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-save"></i> Guardar Venta
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Formset management
+        let formNum = parseInt(document.querySelector('#id_detalles-TOTAL_FORMS').value);
+        const maxForms = parseInt(document.querySelector('#id_detalles-MAX_NUM_FORMS').value);
+        
+        // Add form
+        document.querySelector('#add-form').addEventListener('click', function() {
+            if (formNum < maxForms) {
+                const container = document.querySelector('#formset-container');
+                const emptyForm = container.querySelector('.formset-row:first-child').cloneNode(true);
+                
+                // Update form number
+                const regex = new RegExp('detalles-(\\d+)-', 'g');
+                emptyForm.innerHTML = emptyForm.innerHTML.replace(regex, `detalles-${formNum}-`);
+                
+                // Clear values
+                emptyForm.querySelectorAll('input, select').forEach(function(input) {
+                    if (input.type !== 'hidden') {
+                        input.value = '';
+                    }
+                });
+                
+                // Add remove button functionality
+                const removeBtn = emptyForm.querySelector('.remove-form');
+                if (removeBtn) {
+                    removeBtn.addEventListener('click', function() {
+                        emptyForm.remove();
+                        formNum--;
+                        document.querySelector('#id_detalles-TOTAL_FORMS').value = formNum;
+                        calculateTotal();
+                    });
+                }
+                
+                container.appendChild(emptyForm);
+                formNum++;
+                document.querySelector('#id_detalles-TOTAL_FORMS').value = formNum;
+                
+                // Add event listeners to new inputs
+                addCalculationListeners(emptyForm);
+            } else {
+                alert('No se pueden agregar más productos.');
+            }
+        });
+        
+        // Remove form
+        document.querySelectorAll('.remove-form').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                btn.closest('.formset-row').remove();
+                formNum--;
+                document.querySelector('#id_detalles-TOTAL_FORMS').value = formNum;
+                calculateTotal();
+            });
+        });
+        
+        // Calculate total
+        function calculateTotal() {
+            let total = 0;
+            document.querySelectorAll('.formset-row').forEach(function(row) {
+                const cantidad = parseFloat(row.querySelector('[name$="-cantidad_cubetas"]')?.value) || 0;
+                const precio = parseFloat(row.querySelector('[name$="-precio_unitario_cubeta"]')?.value) || 0;
+                total += cantidad * precio;
+            });
+            document.querySelector('#total-venta').textContent = '$' + total.toLocaleString('es-CO');
+        }
+        
+        // Add event listeners for calculation
+        function addCalculationListeners(container) {
+            container.querySelectorAll('[name$="-cantidad_cubetas"], [name$="-precio_unitario_cubeta"]').forEach(function(input) {
+                input.addEventListener('input', calculateTotal);
+                input.addEventListener('change', calculateTotal);
+            });
+        }
+        
+        // Initial setup
+        document.querySelectorAll('.formset-row').forEach(function(row) {
+            addCalculationListeners(row);
+        });
+        
+        calculateTotal();
+        
+        // Update precio when tipo_huevo changes
+        document.querySelectorAll('[name$="-tipo_huevo"]').forEach(function(select) {
+            select.addEventListener('change', function() {
+                const row = this.closest('.formset-row');
+                const precioInput = row.querySelector('[name$="-precio_unitario"]');
+                const selectedOption = this.options[this.selectedIndex];
+                
+                if (selectedOption && selectedOption.dataset.precio) {
+                    precioInput.value = selectedOption.dataset.precio;
+                    calculateTotal();
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

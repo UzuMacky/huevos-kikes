@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ cliente.nombre }} - Huevos Kikes{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                    <i class="bi bi-person"></i> Detalle del Cliente
+                </h4>
+                <div>
+                    <a href="{% url 'clientes:update' cliente.pk %}" class="btn btn-warning">
+                        <i class="bi bi-pencil"></i> Editar
+                    </a>
+                    <a href="{% url 'clientes:list' %}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Volver
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Información General</h5>
+                        <table class="table">
+                            <tr>
+                                <th width="40%">Nombre:</th>
+                                <td>{{ cliente.nombre }}</td>
+                            </tr>
+                            <tr>
+                                <th>Cédula/NIT:</th>
+                                <td>{{ cliente.cedula_nit }}</td>
+                            </tr>
+                            <tr>
+                                <th>Dirección:</th>
+                                <td>{{ cliente.direccion }}</td>
+                            </tr>
+                            <tr>
+                                <th>Teléfono:</th>
+                                <td>{{ cliente.telefono }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email:</th>
+                                <td>{{ cliente.email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Estado:</th>
+                                <td>
+                                    {% if cliente.activo %}
+                                        <span class="badge bg-success">Activo</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Inactivo</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Fecha de Registro:</th>
+                                <td>{{ cliente.fecha_registro|date:"d/m/Y H:i" }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h5>Ubicación</h5>
+                        {% if cliente.latitud and cliente.longitud %}
+                            <p>
+                                <strong>Coordenadas:</strong><br>
+                                Latitud: {{ cliente.latitud }}<br>
+                                Longitud: {{ cliente.longitud }}
+                            </p>
+                            <div id="map" style="height: 300px; width: 100%;"></div>
+                        {% else %}
+                            <p class="text-muted">No se ha registrado ubicación para este cliente.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if cliente.latitud and cliente.longitud %}
+<script>
+    // @ts-nocheck - Django template variables
+    let map;
+    function initMap() {
+        const location = { lat: {{ cliente.latitud }}, lng: {{ cliente.longitud }} };
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: location,
+            zoom: 15
+        });
+        new google.maps.Marker({
+            position: location,
+            map: map,
+            title: "{{ cliente.nombre }}"
+        });
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&callback=initMap" async defer></script>
+{% endif %}
+{% endblock %}

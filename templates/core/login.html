@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - Huevos Kikes{% endblock %}
+
+{% block login_content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="card shadow">
+            <div class="card-header text-center">
+                <h3>🥚 Huevos Kikes SCM</h3>
+                <p class="mb-0">Sistema de Gestión de Cadena de Suministro</p>
+            </div>
+            <div class="card-body p-4">
+                <h4 class="text-center mb-4">Iniciar Sesión</h4>
+                
+                {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>Error:</strong> Usuario o contraseña incorrectos.
+                </div>
+                {% endif %}
+                
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.username.id_for_label }}" class="form-label">
+                            <i class="bi bi-person"></i> Usuario
+                        </label>
+                        <input type="text" 
+                               name="{{ form.username.name }}" 
+                               class="form-control form-control-lg" 
+                               id="{{ form.username.id_for_label }}"
+                               placeholder="Ingrese su usuario"
+                               required
+                               autofocus>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.password.id_for_label }}" class="form-label">
+                            <i class="bi bi-lock"></i> Contraseña
+                        </label>
+                        <input type="password" 
+                               name="{{ form.password.name }}" 
+                               class="form-control form-control-lg" 
+                               id="{{ form.password.id_for_label }}"
+                               placeholder="Ingrese su contraseña"
+                               required>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                        </button>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <a href="{% url 'core:password_reset' %}" class="text-decoration-none">
+                            ¿Olvidaste tu contraseña?
+                        </a>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center text-muted">
+                <small>UNIMINUTO - Sistemas de Información</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
