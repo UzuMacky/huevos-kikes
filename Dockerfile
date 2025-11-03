@@ -40,8 +40,9 @@ RUN python manage.py collectstatic --noinput || true
 # Exponer el puerto 8000
 EXPOSE 8000
 
-# Ejecutar migraciones y crear superusuario (si se proporcionan variables) al iniciar, luego lanzar Gunicorn
+# Ejecutar migraciones, crear superusuario (si aplica) y recopilar estáticos al iniciar; luego lanzar Gunicorn
 # Usa DJANGO_SUPERUSER_USERNAME, DJANGO_SUPERUSER_EMAIL, DJANGO_SUPERUSER_PASSWORD
 CMD ["sh", "-c", "python manage.py migrate --noinput \
-    && (python manage.py createsuperuser --noinput || true) \
-    && gunicorn huevos_kikes_scm.wsgi:application --bind 0.0.0.0:8000 --workers 3"]
+  && (python manage.py createsuperuser --noinput || true) \
+  && python manage.py collectstatic --noinput \
+  && gunicorn huevos_kikes_scm.wsgi:application --bind 0.0.0.0:8000 --workers 3"]
