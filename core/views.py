@@ -4,11 +4,13 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import TransaccionCaja
 from .utils import get_saldo_actual
+from .forms import LoginFormWithCaptcha
 
 
 class CustomLoginView(LoginView):
-    """Vista personalizada para el login."""
+    """Vista personalizada para el login con captcha."""
     template_name = 'core/login.html'
+    form_class = LoginFormWithCaptcha
     redirect_authenticated_user = True
 
 

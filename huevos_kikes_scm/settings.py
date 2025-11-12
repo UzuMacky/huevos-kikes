@@ -54,7 +54,8 @@ INSTALLED_APPS = [
     'inventario',
     'transacciones',
     
-    # Apps de terceros (si se usan)
+    # Apps de terceros
+    'captcha',  # django-simple-captcha
     # 'storages',  # Para django-storages (S3)
 ]
 
@@ -217,4 +218,16 @@ if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
+
+
+# ===== Configuración de django-simple-captcha =====
+CAPTCHA_IMAGE_SIZE = (150, 50)  # Tamaño de la imagen del captcha
+CAPTCHA_FONT_SIZE = 30  # Tamaño de la fuente
+CAPTCHA_LETTER_ROTATION = (-20, 20)  # Rotación de letras
+CAPTCHA_BACKGROUND_COLOR = '#ffffff'  # Fondo blanco
+CAPTCHA_FOREGROUND_COLOR = '#001F3F'  # Texto azul oscuro
+CAPTCHA_LENGTH = 6  # 6 caracteres
+CAPTCHA_TIMEOUT = 5  # Expira en 5 minutos
+CAPTCHA_NOISE_FUNCTIONS = ('captcha.helpers.noise_dots',)  # Ruido de puntos
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'  # Solo letras/números
 

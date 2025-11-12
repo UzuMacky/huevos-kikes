@@ -7,6 +7,7 @@ Sistema de gestión de cadena de suministro (Supply Chain Management) para Huevo
 
 ## ✨ Funcionalidades
 
+- **Seguridad**: Login con captcha (django-simple-captcha) para protección contra bots
 - Proveedores: documentos (RUT, Cámara de Comercio) y CRUD
 - Clientes: geolocalización con Google Maps y captura de coordenadas
 - Inventario: tipos de huevo (A, AA, AAA) y control de stock

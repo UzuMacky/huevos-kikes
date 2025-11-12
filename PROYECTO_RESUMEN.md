@@ -88,6 +88,8 @@ Sistema completo de gestión de cadena de suministro (SCM) para Huevos Kikes, de
 
 ### Módulo 0: Autenticación (core)
 ✅ Login/Logout con LoginView y LogoutView  
+✅ **Captcha en Login (django-simple-captcha)** 🔒  
+✅ Protección contra bots y ataques de fuerza bruta  
 ✅ Recuperación de contraseña (4 vistas)  
 ✅ Email backend configurado (consola/SMTP)  
 ✅ Dashboard con saldo en caja  
@@ -248,6 +250,7 @@ Pillow>=10.1.0
 
 ## 🔐 Seguridad Implementada
 
+✅ **Captcha en Login** - Protección contra bots (django-simple-captcha) 🛡️  
 ✅ SECRET_KEY desde variable de entorno  
 ✅ DEBUG=False en producción  
 ✅ ALLOWED_HOSTS restringido  
@@ -255,7 +258,7 @@ Pillow>=10.1.0
 ✅ Session cookies secure en producción  
 ✅ XSS protection  
 ✅ Content type nosniff  
-✅ LoginRequiredMixin en todas las vistas  
+✅ LoginRequiredMixin en todas las vistas protegidas  
 
 ---
 

@@ -28,6 +28,9 @@ urlpatterns = [
     path('clientes/', include('clientes.urls')),
     path('inventario/', include('inventario.urls')),
     path('transacciones/', include('transacciones.urls')),
+    
+    # Captcha URLs
+    path('captcha/', include('captcha.urls')),
 ]
 
 # Servir archivos media en desarrollo
